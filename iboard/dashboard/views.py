@@ -10,8 +10,9 @@ from .forms import *
 
 
 def stats_view(request):
-
-    results = { }
+""" Django view to take github repo url as input and fetch issues data for the 
+    repo using Github API's """
+    results = {}
 
     if request.method == "POST":
         form = IssueForm(request.POST)

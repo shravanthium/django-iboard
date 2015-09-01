@@ -1,0 +1,57 @@
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<div class="container">
+<div class="container-fluid">
+  <h2><img src="https://assets-cdn.github.com/images/modules/open_graph/github-mark.png" height="42" width="60" alt="Github Logo"> Issues Tracker for your Github Repo </h2>
+  <div class="form-group">
+  <form action="/stat/{{url}}" method="post" class="form">
+		<div>
+      {% csrf_token %}
+    	<input type="text" name="url"  placeholder="Enter Your Repo URL" class="form-control">
+    </div>
+  	<br/>
+    <div>
+  		<button class="btn btn-success" type="submit">Get Stats</button>
+  	</div>
+  	</form>
+  </div>
+  </div>
+  
+  {% if response.error %}
+	<div class="alert alert-warning" role="alert">
+		{{response.error}}
+	</div>
+  {% elif response%}
+  <div class="table-responsive">
+	<table class="table table-striped">
+	<tr>
+		<th>Title</th>
+		<th>Count</th>
+	</tr>
+		<tr>
+			<td>Total number of open issues</td>
+			<td>{{response.count}}</td>
+		</tr>
+		<tr>
+			<td>Number of open issues that were opened in the last 24 hours</td>
+			<td>{{response.last_24hrs}}</td>
+		</tr>
+		<tr>
+			<td>Number of open issues that were opened more than 24 hours ago but less than 7 days ago</td>
+			<td>{{response.last_7days}}</td>
+		</tr>
+		<tr>
+			<td>Number of open issues that were opened more than 7 days ago </td>
+			<td>{{response.before_7days}}</td>
+		</tr>
+	</table>
+</div>
+{% else %}
+<div>
+		
+</div>
+{% endif %}
+</div>
+

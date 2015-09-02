@@ -17,22 +17,24 @@ display a table with the following information -
 - Number of open issues that were opened more than 7 days ago 
 
 
-**Solution/ Tasks Performed:**
+**Tasks Performed:**
 
 Github Issues API provides an information rich json response.
 Take any public github repo url and construct url for Github API request.
-https://api.github.com/repos/<user>/<repo> return list of issues and the response
+API request to *https://api.github.com/repos/{user}/{repo}* returns list of issues and the response
 header contains link for pagination.
 
 1. Construct url for api request specific to user provided repository
 2. Make api request for the given repo and capture next urls
-3. Parse the reponse and compute set of data as expected in the output
-4. Deploy the application 
-Tech Stack:
+3. Parse the reponse and compute set of aggregations as expected in the output
+4. Display the result in a table
+5. 
+Technology Stack Used:
 Django 1.8
-Github API's
+Digitalocean for deployment
+Github API's to fetch the relevant data
 
 **Enhancements:**
-- Migrate the code to golang for better performace with concurrency
-- Dockerize the django app 
+- Migrate the code to golang for better performace
+- Dockerize the app
     

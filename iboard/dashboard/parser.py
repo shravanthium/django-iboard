@@ -6,7 +6,7 @@ from django.utils.timezone import utc
 
 
 def fetch_data(url):
-"""Take repo issues url and fetch data for all the available number of pages"""
+    """Take repo issues url and fetch data for all the available number of pages"""
 
     data = requests.get(url)
     response = json.loads(data.content)
@@ -28,29 +28,26 @@ def fetch_data(url):
 
    
 def parse_json(response):
-"""Parse the response from github issues API and compute stats"""
+    """Parse the response from github issues API and compute stats"""
 
     open_issues = 0
     last24hrs_issues = 0
     last7days_issues = 0
     prior7days_issues = 0
+    cur_timestamp = datetime.utcnow().replace(tzinfo=utc)
 
     for r in response:
+        created_at = parse(r.get("created_at"))
         if r.get("state") =="open":
             open_issues += 1
 
-        if datetime.utcnow().replace(tzinfo=utc)-parse(r.get(
-            "created_at")) < timedelta(days=1) and r.get("state") =="open":
+        if cur_timestamp - created_at < timedelta(days=1) and r.get("state") =="open":
             last24hrs_issues += 1
-
-        if datetime.utcnow().replace(tzinfo=utc)-parse(r.get(
-            "created_at")) > timedelta(days=1) and datetime.utcnow().replace(
-            tzinfo=utc)-parse(r.get("created_at")) < timedelta(days=7) and 
-            r.get("state") =="open":
+        
+        if cur_timestamp-created_at > timedelta(days=1) and cur_timestamp-created_at < timedelta(days=7) and r.get("state")=="open":
             last7days_issues += 1
 
-        if datetime.utcnow().replace(tzinfo=utc)-parse(r.get(
-            "created_at")) > timedelta(days=7) and r.get("state") =="open":
+        if cur_timestamp-created_at > timedelta(days=7) and r.get("state") =="open":
             prior7days_issues += 1
 
     return {

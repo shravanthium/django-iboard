@@ -17,7 +17,9 @@ def stats_view(request):
     form = IssueForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
-        repo = form.cleaned_data["url"].split("/")
+        url = form.cleaned_data["url"].rstrip('/') #remove trailing slash if any
+        repo = url.split("/") #split url to get user and repo name
+        
         #check for valid repo url
         if len(repo) == 5:
             url = "https://api.github.com/repos/"+ repo[-2] +"/"+ repo[-1] + "/issues"
